@@ -36,25 +36,55 @@ def analyze():
     best_day = day_avg_sorted[0][0]
     worst_day = day_avg_sorted[-1][0]
 
-    html = f"""
+    html = html = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meta Post Performance Analyzer</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f5f5f5; }}
+        h1 {{ color: #1877f2; border-bottom: 3px solid #1877f2; padding-bottom: 10px; }}
+        h2 {{ color: #333; margin-top: 30px; }}
+        .card {{ background: white; border-radius: 10px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }}
+        .post-item {{ padding: 10px; border-left: 4px solid #1877f2; margin: 10px 0; background: #f0f7ff; }}
+        .stat {{ display: inline-block; background: #1877f2; color: white; padding: 8px 16px; border-radius: 20px; margin: 5px; }}
+        .best {{ color: #28a745; font-weight: bold; }}
+        .worst {{ color: #dc3545; font-weight: bold; }}
+        .day-bar {{ background: #1877f2; height: 20px; border-radius: 4px; margin: 5px 0; }}
+        table {{ width: 100%; border-collapse: collapse; }}
+        td, th {{ padding: 10px; text-align: left; border-bottom: 1px solid #eee; }}
+        th {{ background: #1877f2; color: white; }}
+    </style>
+</head>
+<body>
     <h1>Meta Post Performance Analyzer</h1>
-    <h2>Top 3 Posts by Likes</h2>
-    <ol>
-    {"".join(f"<li>{p['message']} - {p['likes']} likes, {p['comments']} comments</li>" for p in top_3)}
-    </ol>
-    <h2>Average Likes by Day of Week</h2>
-    <ul>
-    {"".join(f"<li>{day}: {avg:.1f} likes</li>" for day, avg in day_avg_sorted)}
-    </ul>
-    <h2>Overall Analysis</h2>
-    <p>Total posts: {len(posts)}</p>
-    <p>Total likes: {total_likes}</p>
-    <p>Total comments: {total_comments}</p>
-    <p>Average likes/post: {total_likes/len(posts):.1f}</p>
-    <p>Best performing day: <b>{best_day}</b></p>
-    <p>Worst performing day: <b>{worst_day}</b></p>
-    <p><b>Conclusion: Posting on {best_day} generates the most engagement.</b></p>
-    """
+
+    <div class="card">
+        <h2>Top 3 Posts by Likes</h2>
+        {"".join(f'<div class="post-item"><b>#{i+1}</b> {p["message"]} &nbsp; <span class="stat">{p["likes"]} likes</span> <span class="stat">{p["comments"]} comments</span></div>' for i, p in enumerate(top_3))}
+    </div>
+
+    <div class="card">
+        <h2>Average Likes by Day of Week</h2>
+        <table>
+            <tr><th>Day</th><th>Average Likes</th><th>Performance</th></tr>
+            {"".join(f'<tr><td>{day}</td><td>{avg:.1f}</td><td><div class="day-bar" style="width:{int(avg/4)}px"></div></td></tr>' for day, avg in day_avg_sorted)}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Overall Analysis</h2>
+        <p>Total posts: <b>{len(posts)}</b></p>
+        <p>Total likes: <b>{total_likes}</b></p>
+        <p>Total comments: <b>{total_comments}</b></p>
+        <p>Average likes/post: <b>{total_likes/len(posts):.1f}</b></p>
+        <p>Best performing day: <span class="best">{best_day}</span></p>
+        <p>Worst performing day: <span class="worst">{worst_day}</span></p>
+        <p><b>Conclusion: Posting on {best_day} generates the most engagement.</b></p>
+    </div>
+</body>
+</html>
+"""
     return html
 
 if __name__ == "__main__":
